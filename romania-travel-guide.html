@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🇷🇴 מדריך רומניה המשפחתי</title>
+<style>
+/* ===== RESET & BASE ===== */
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;font-family:'Segoe UI',Arial,sans-serif;direction:rtl;overflow-x:hidden}
+:root{
+  --bg:#0a1628;--surface:#112240;--surface2:#1e3a5f;
+  --accent:#c9a84c;--accent2:#e8c96d;--text:#e0eaf5;--text2:#a0b4c8;
+  --danger:#e74c3c;--success:#27ae60;--nav-w:280px;
+  --card:#162840;--border:#1e4070;
+}
+body.kids{
+  --bg:#fff9f0;--surface:#ffe8d0;--surface2:#ffd4a8;
+  --accent:#ff6b35;--accent2:#ff9a5c;--text:#2c1810;--text2:#6b3a2a;
+  --card:#fff0e0;--border:#ffb87a;--nav-w:280px;
+}
+
+/* ===== LAYOUT ===== */
+body{background:var(--bg);color:var(--text);transition:background .3s,color .3s}
+#app{display:flex;flex-direction:column;min-height:100vh}
+
+/* ===== HEADER ===== */
+#header{
+  background:var(--surface);border-bottom:2px solid var(--accent);
+  padding:12px 16px;display:flex;align-items:center;gap:12px;
+  position:sticky;top:0;z-index:200;
+}
+#menuBtn{background:none;border:none;cursor:pointer;font-size:22px;color:var(--accent);padding:4px 8px;border-radius:6px;transition:background .2s}
+#menuBtn:hover{background:var(--surface2)}
+#headerTitle{flex:1;font-size:1.15rem;font-weight:700;color:var(--accent)}
+#modeToggle{
+  background:var(--surface2);border:2px solid var(--accent);color:var(--accent);
+  padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.85rem;font-weight:600;
+  transition:all .2s;white-space:nowrap
+}
+#modeToggle:hover{background:var(--accent);color:var(--bg)}
+
+/* ===== DRAWER ===== */
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:299;opacity:0;pointer-events:none;transition:opacity .3s}
+#overlay.show{opacity:1;pointer-events:all}
+#drawer{
+  position:fixed;top:0;right:-300px;width:var(--nav-w);height:100%;
+  background:var(--surface);border-left:2px solid var(--accent);
+  z-index:300;transition:right .3s;overflow-y:auto;padding-bottom:20px
+}
+#drawer.open{right:0}
+#drawerHeader{
+  background:var(--surface2);padding:18px 16px;display:flex;
+  align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)
+}
+#drawerHeader h2{color:var(--accent);font-size:1.1rem}
+#closeDrawer{background:none;border:none;cursor:pointer;font-size:20px;color:var(--text2);padding:4px}
+.navItem{
+  display:flex;align-items:center;gap:10px;padding:13px 18px;cursor:pointer;
+  border-bottom:1px solid var(--border);transition:background .2s;font-size:0.95rem
+}
+.navItem:hover,.navItem.active{background:var(--surface2);color:var(--accent)}
+.navItem .icon{font-size:1.3rem;width:28px;text-align:center}
+
+/* ===== MAIN CONTENT ===== */
+#content{flex:1;padding:16px;max-width:900px;margin:0 auto;width:100%}
+.section{display:none}
+.section.active{display:block}
+
+/* ===== CARDS ===== */
+.card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:16px;margin-bottom:16px;
+}
+.card h2{color:var(--accent);margin-bottom:10px;font-size:1.1rem}
+.card h3{color:var(--accent2);margin-bottom:8px}
+
+/* ===== HOME ===== */
+#homeHero{
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border-radius:16px;padding:28px 20px;text-align:center;margin-bottom:20px;
+  border:2px solid var(--accent);
+}
+#homeHero .flag{font-size:3rem;margin-bottom:8px}
+#homeHero h1{color:var(--accent);font-size:1.6rem;margin-bottom:6px}
+#homeHero p{color:var(--text2);font-size:0.9rem}
+.quickNav{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
+.qBtn{
+  background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+  padding:14px 10px;cursor:pointer;text-align:center;transition:all .2s;
+  color:var(--text);font-size:0.9rem
+}
+.qBtn:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.qBtn .qIcon{font-size:1.6rem;display:block;margin-bottom:4px}
+
+/* ===== ITINERARY ===== */
+.dayCard{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  margin-bottom:14px;overflow:hidden;
+}
+.dayHeader{
+  background:var(--surface2);padding:12px 16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background .2s
+}
+.dayHeader:hover{background:var(--border)}
+.dayHeader .dayNum{
+  background:var(--accent);color:var(--bg);width:32px;height:32px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:0.85rem;flex-shrink:0
+}
+.dayHeader .dayInfo{flex:1;padding:0 12px}
+.dayHeader .dayTitle{font-weight:600;font-size:0.95rem}
+.dayHeader .dayDate{font-size:0.78rem;color:var(--text2)}
+.dayHeader .arrow{color:var(--text2);transition:transform .3s;font-size:1.1rem}
+.dayBody{display:none;padding:14px 16px;border-top:1px solid var(--border)}
+.dayBody.open{display:block}
+.dayBody p{font-size:0.88rem;color:var(--text2);line-height:1.6;margin-bottom:8px}
+.mapEmbed{width:100%;height:220px;border:none;border-radius:8px;margin:10px 0}
+.bbqTag{
+  display:inline-block;background:#e74c3c22;border:1px solid var(--danger);
+  color:var(--danger);padding:3px 10px;border-radius:12px;font-size:0.78rem;margin-top:6px
+}
+.badge{
+  display:inline-block;background:var(--surface2);border:1px solid var(--border);
+  color:var(--accent);padding:3px 10px;border-radius:12px;font-size:0.78rem;margin:2px
+}
+
+/* ===== STORIES ===== */
+.storyCard{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  margin-bottom:16px;overflow:hidden
+}
+.storyHeader{
+  background:var(--surface2);padding:12px 16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between
+}
+.storyHeader:hover{background:var(--border)}
+.storyHeader .storyTitle{font-weight:600;color:var(--accent)}
+.storyHeader .arrow{color:var(--text2);transition:transform .3s}
+.storyBody{display:none;padding:16px;border-top:1px solid var(--border);direction:rtl;text-align:right}
+.storyBody.open{display:block}
+.storyText{font-size:0.92rem;line-height:1.85;color:var(--text);margin-bottom:16px}
+.quizSection{margin-top:12px}
+.quizSection h4{color:var(--accent);margin-bottom:10px;font-size:0.95rem}
+.quiz-q{margin-bottom:14px}
+.quiz-q p{font-weight:600;font-size:0.9rem;margin-bottom:6px}
+.quiz-opts{display:flex;flex-direction:column;gap:6px}
+.quiz-opt{
+  background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  padding:8px 12px;cursor:pointer;font-size:0.87rem;text-align:right;
+  transition:all .2s
+}
+.quiz-opt:hover{border-color:var(--accent)}
+.quiz-opt.correct{background:#27ae6022;border-color:#27ae60;color:#27ae60}
+.quiz-opt.wrong{background:#e74c3c22;border-color:#e74c3c;color:#e74c3c}
+.quiz-opt.disabled{pointer-events:none}
+.quiz-feedback{margin-top:6px;font-size:0.82rem;font-weight:600}
+.quiz-feedback.ok{color:#27ae60}
+.quiz-feedback.nope{color:#e74c3c}
+.storyProgress{font-size:0.8rem;color:var(--text2);margin-bottom:8px}
+
+/* ===== GAME ===== */
+#gameSection{text-align:center}
+#gameWrapper{
+  position:relative;display:inline-block;width:100%;max-width:700px;margin:0 auto
+}
+#game-canvas{
+  width:100%;border-radius:12px;border:2px solid var(--accent);
+  display:block;cursor:pointer;touch-action:none
+}
+#gameHUD{
+  display:flex;justify-content:space-between;padding:8px 4px;font-size:0.9rem;font-weight:600
+}
+#gameHUD span{color:var(--accent)}
+#gameOverScreen{
+  display:none;position:absolute;inset:0;background:rgba(0,0,0,.75);
+  border-radius:12px;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  direction:rtl;
+}
+#gameOverScreen.show{display:flex}
+#gameOverScreen h2{color:var(--accent);font-size:1.4rem}
+#gameOverScreen p{color:var(--text)}
+.nameInput{
+  background:var(--surface2);border:2px solid var(--accent);border-radius:8px;
+  padding:8px 12px;font-size:0.9rem;color:var(--text);width:180px;text-align:center;direction:rtl
+}
+.gameBtn{
+  background:var(--accent);color:var(--bg);border:none;border-radius:8px;
+  padding:10px 22px;cursor:pointer;font-size:0.9rem;font-weight:700;
+  transition:all .2s;margin:4px
+}
+.gameBtn:hover{background:var(--accent2)}
+#startGameBtn{
+  background:var(--accent);color:var(--bg);border:none;border-radius:10px;
+  padding:12px 28px;font-size:1rem;font-weight:700;cursor:pointer;margin:10px auto;display:block
+}
+.gameTip{font-size:0.8rem;color:var(--text2);margin-top:6px}
+
+/* ===== SCORES TABLE ===== */
+#scoresTable{width:100%;border-collapse:collapse;margin-top:10px}
+#scoresTable th{
+  background:var(--surface2);color:var(--accent);padding:8px 12px;
+  font-size:0.85rem;text-align:center
+}
+#scoresTable td{
+  padding:8px 12px;text-align:center;border-bottom:1px solid var(--border);
+  font-size:0.88rem
+}
+#scoresTable tr:nth-child(odd){background:var(--surface)}
+.clearBtn{
+  background:var(--danger);color:#fff;border:none;border-radius:8px;
+  padding:8px 18px;cursor:pointer;font-size:0.85rem;margin-top:10px
+}
+
+/* ===== INFO / TIPS ===== */
+.tipGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:520px){.tipGrid{grid-template-columns:1fr}}
+.tipCard{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px
+}
+.tipCard .tipIcon{font-size:1.8rem;margin-bottom:6px}
+.tipCard h3{color:var(--accent);font-size:0.9rem;margin-bottom:4px}
+.tipCard p{font-size:0.82rem;color:var(--text2);line-height:1.5}
+
+/* ===== MUSIC PLAYER ===== */
+#musicBar{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--surface);border-top:1px solid var(--border);
+  padding:8px 16px;display:flex;align-items:center;gap:12px;z-index:100
+}
+#musicBtn{
+  background:var(--surface2);border:1px solid var(--accent);color:var(--accent);
+  border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;transition:all .2s
+}
+#musicBtn:hover{background:var(--accent);color:var(--bg)}
+#musicLabel{font-size:0.8rem;color:var(--text2);flex:1}
+#volSlider{width:80px;accent-color:var(--accent)}
+
+/* ===== KIDS MODE OVERRIDES ===== */
+body.kids #homeHero{background:linear-gradient(135deg,#ffe4b5,#ffd700)}
+body.kids .dayHeader .dayNum{background:var(--accent);color:#fff}
+body.kids .qBtn:hover{background:var(--accent);color:#fff}
+body.kids .quiz-opt:hover{background:#ffd700;color:#333}
+body.kids .gameBtn{background:var(--accent);color:#fff}
+body.kids #startGameBtn{background:var(--accent);color:#fff}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--surface)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* bottom padding for music bar */
+#content{padding-bottom:70px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <button id="menuBtn" onclick="toggleDrawer()">☰</button>
+  <div id="headerTitle">🇷🇴 מדריך רומניה המשפחתי</div>
+  <button id="modeToggle" onclick="toggleMode()">🌈 מצב ילדים</button>
+</div>
+
+<!-- OVERLAY -->
+<div id="overlay" onclick="closeDrawer()"></div>
+
+<!-- DRAWER -->
+<div id="drawer">
+  <div id="drawerHeader">
+    <h2>🗺️ ניווט</h2>
+    <button id="closeDrawer" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="navItem active" onclick="showSection('home');closeDrawer()" data-sec="home">
+    <span class="icon">🏠</span>בית
+  </div>
+  <div class="navItem" onclick="showSection('itinerary');closeDrawer()" data-sec="itinerary">
+    <span class="icon">📅</span>מסלול 14 יום
+  </div>
+  <div class="navItem" onclick="showSection('stories');closeDrawer()" data-sec="stories">
+    <span class="icon">📖</span>סיפורים וחידונים
+  </div>
+  <div class="navItem" onclick="showSection('game');closeDrawer();setTimeout(initGameCanvas,100)" data-sec="game">
+    <span class="icon">🎮</span>משחק הדוב
+  </div>
+  <div class="navItem" onclick="showSection('scores');closeDrawer()" data-sec="scores">
+    <span class="icon">🏆</span>שיאים
+  </div>
+  <div class="navItem" onclick="showSection('tips');closeDrawer()" data-sec="tips">
+    <span class="icon">💡</span>טיפים מועילים
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="app">
+  <div id="content">
+
+    <!-- HOME -->
+    <div id="sec-home" class="section active">
+      <div id="homeHero">
+        <div class="flag">🇷🇴</div>
+        <h1>ברוכים הבאים לרומניה!</h1>
+        <p>מסע משפחתי מרהיב — 8 עד 21 באוגוסט 2025</p>
+        <p style="margin-top:6px;font-size:0.85rem;color:var(--text2)">טרנסילבניה • בוקרשט • סינאיה • קלוז'-נאפוקה</p>
+      </div>
+      <div class="quickNav">
+        <div class="qBtn" onclick="showSection('itinerary')">
+          <span class="qIcon">📅</span>מסלול יומי
+        </div>
+        <div class="qBtn" onclick="showSection('stories')">
+          <span class="qIcon">📖</span>סיפורים
+        </div>
+        <div class="qBtn" onclick="showSection('game');setTimeout(initGameCanvas,100)">
+          <span class="qIcon">🎮</span>משחק הדוב
+        </div>
+        <div class="qBtn" onclick="showSection('tips')">
+          <span class="qIcon">💡</span>טיפים
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <h2>🗺️ על הטיול</h2>
+        <p style="font-size:0.9rem;line-height:1.7;color:var(--text2)">
+          רומניה היא מדינה קסומה בלב אירופה עם טירות מרהיבות, יערות עבותים, הרי קרפטים ותרבות עשירה.
+          במסלול שלנו נכיר את בוקרשט הקוסמופוליטית, סינאיה עם טירת פלש, ברשוב העתיקה,
+          ולא נשכח לנסות פפנאש, מממליגה ושאר מטעמי המטבח הרומני!
+        </p>
+      </div>
+      <div class="card">
+        <h2>🍖 BBQ &amp; אוכל</h2>
+        <p style="font-size:0.88rem;line-height:1.7;color:var(--text2)">
+          במסלול קיימים מספר עצירות BBQ משפחתיות ♨️ — סמנו בלוח היומי. ניתן לקנות מנגל חד-פעמי ביציאה מבוקרשט.
+          מומלץ לאחסן: נקניקיות, לחם, גבינה, עגבניות טריות וקטשופ.
+        </p>
+      </div>
+    </div>
+
+    <!-- ITINERARY -->
+    <div id="sec-itinerary" class="section">
+      <div class="card">
+        <h2>📅 מסלול 14 יום — 8–21 אוגוסט 2025</h2>
+        <p style="font-size:0.85rem;color:var(--text2)">לחצו על יום להרחבה</p>
+      </div>
+      <div id="itineraryList"></div>
+    </div>
+
+    <!-- STORIES -->
+    <div id="sec-stories" class="section">
+      <div class="card">
+        <h2>📖 סיפורים עבריים מרומניה</h2>
+        <p style="font-size:0.85rem;color:var(--text2)">קראו את הסיפורים וענו על השאלות!</p>
+      </div>
+      <div id="storiesList"></div>
+    </div>
+
+    <!-- GAME -->
+    <div id="sec-game" class="section">
+      <div class="card" style="margin-bottom:12px">
+        <h2>🎮 ריצת הדוב הרומני</h2>
+        <p style="font-size:0.85rem;color:var(--text2)">קפוץ מעל תרנגולות, אסוף פפנאש ודבש! קפיצה כפולה אפשרית.</p>
+      </div>
+      <div id="gameWrapper">
+        <div id="gameHUD">
+          <span>ניקוד: <span id="score-display">0</span></span>
+          <span>שיא: <span id="hiscore-display">0</span></span>
+        </div>
+        <canvas id="game-canvas" width="700" height="200"></canvas>
+        <div id="gameOverScreen">
+          <h2>🐻 המשחק נגמר!</h2>
+          <p>ניקוד: <strong id="final-score">0</strong></p>
+          <input class="nameInput" id="playerName" placeholder="שמך לשיאים" maxlength="20">
+          <div>
+            <button class="gameBtn" onclick="saveScore()">💾 שמור שיא</button>
+            <button class="gameBtn" onclick="startGame()">🔄 שחק שוב</button>
+          </div>
+        </div>
+      </div>
+      <button id="startGameBtn" onclick="startGame()">🐻 התחל משחק!</button>
+      <p class="gameTip">מקלדת: רווח / ↑ | מובייל: נגיעה על הקנבס</p>
+    </div>
+
+    <!-- SCORES -->
+    <div id="sec-scores" class="section">
+      <div class="card">
+        <h2>🏆 לוח השיאים</h2>
+        <table id="scoresTable">
+          <thead><tr><th>#</th><th>שחקן</th><th>ניקוד</th></tr></thead>
+          <tbody id="scoresTbody"></tbody>
+        </table>
+        <button class="clearBtn" onclick="clearScores()">🗑️ נקה שיאים</button>
+      </div>
+    </div>
+
+    <!-- TIPS -->
+    <div id="sec-tips" class="section">
+      <div class="card">
+        <h2>💡 טיפים מועילים לרומניה</h2>
+      </div>
+      <div class="tipGrid" id="tipsGrid"></div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /app -->
+
+<!-- MUSIC BAR -->
+<div id="musicBar">
+  <button id="musicBtn" onclick="toggleMusic()">▶</button>
+  <span id="musicLabel">🎵 מוזיקת רקע רומנית</span>
+  <input type="range" id="volSlider" min="0" max="1" step="0.05" value="0.3" oninput="setVolume(this.value)">
+</div>
+
+<script>
+/* ================================================================
+   MODE TOGGLE
+================================================================ */
+let currentMode = localStorage.getItem('romania_mode') || 'parent';
+
+function applyMode(m) {
+  currentMode = m;
+  document.body.classList.toggle('kids', m === 'kids');
+  document.getElementById('modeToggle').textContent = m === 'kids' ? '🌙 מצב הורים' : '🌈 מצב ילדים';
+  localStorage.setItem('romania_mode', m);
+}
+applyMode(currentMode);
+
+function toggleMode() {
+  applyMode(currentMode === 'parent' ? 'kids' : 'parent');
+}
+
+/* ================================================================
+   DRAWER
+================================================================ */
+function toggleDrawer() {
+  document.getElementById('drawer').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+/* ================================================================
+   NAVIGATION
+================================================================ */
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  document.querySelectorAll('.navItem').forEach(n => {
+    n.classList.toggle('active', n.dataset.sec === id);
+  });
+  window.scrollTo(0, 0);
+  if (id === 'scores') renderScores();
+}
+
+/* ================================================================
+   ITINERARY DATA
+================================================================ */
+const DAYS = [
+  {
+    num: 1, date: 'שישי 8.8', title: 'נחיתה בבוקרשט 🛬',
+    places: ['שדה התעופה Otopeni', 'Piața Unirii', 'מלון בוקרשט'],
+    desc: 'יום הגעה! נחיתה, כניסה לבית המלון, טיול קצר בכיכר האיחוד. ארוחת ערב ראשונה עם מממליגה מסורתית.',
+    mapQuery: 'Piata Unirii Bucharest', bbq: false,
+    tips: ['שער לאומי של שדה התעופה — חליפין בשדה', 'מרכז העיר נגיש ברגל']
+  },
+  {
+    num: 2, date: 'שבת 9.8', title: 'בוקרשט — ארמון הפרלמנט 🏛️',
+    places: ['ארמון הפרלמנט', 'Calea Victoriei', 'Cișmigiu Gardens'],
+    desc: 'ביקור בבנין הגדול ביותר באירופה — ארמון הפרלמנט. אחה"צ טיול בפארק Cișmigiu הקסום.',
+    mapQuery: 'Palace of Parliament Bucharest', bbq: false,
+    tips: ['כרטיסים מראש!', 'פארק Cișmigiu מושלם לפיקניק']
+  },
+  {
+    num: 3, date: 'ראשון 10.8', title: 'בוקרשט — שוקי הישן 🛒',
+    places: ['שוק Obor', 'Old Town', 'Carturesti Carusel'],
+    desc: 'בוקר בשוק הירקות Obor, צהריים בעיר הישנה (Lipscani), ביקור בחנות הספרים המדהימה.',
+    mapQuery: 'Lipscani Bucharest Old Town', bbq: false,
+    tips: ['שוק Obor פתוח עד 14:00', 'נסו Covrigi — קרינגל רומני']
+  },
+  {
+    num: 4, date: 'שני 11.8', title: 'נסיעה לסינאיה 🏔️',
+    places: ['אוטוסטראדה A3', 'Sinaia', 'Peles Castle'],
+    desc: 'נסיעה 2 שעות צפונה לסינאיה בהרי קרפטים. ביקור בטירת פלש — יפה מכל אגדה!',
+    mapQuery: 'Peles Castle Sinaia Romania', bbq: false,
+    tips: ['חנייה ליד הטירה בתשלום', 'קנו כרטיסים מראש אונליין']
+  },
+  {
+    num: 5, date: 'שלישי 12.8', title: 'סינאיה — טיול הרים וBBQ ♨️',
+    places: ['Bucegi Mountains', 'Cota 2000', 'אחו פתוח לBBQ'],
+    desc: 'טלפריק לגובה 2000 מטר! נוף מדהים, אוויר צח. אחה"צ BBQ משפחתי באחו ירוק ליד הנהר.',
+    mapQuery: 'Bucegi Mountains Sinaia cable car', bbq: true,
+    tips: ['קחו ז\'קטים — קר בגובה', 'ניתן לשכור טלפריק בעיר']
+  },
+  {
+    num: 6, date: 'רביעי 13.8', title: 'ברשוב — העיר הגותית 🏰',
+    places: ['Brasov Old Town', 'Black Church', 'Poiana Brasov'],
+    desc: 'ברשוב — אחת הערים היפות באירופה. הכנסייה השחורה, חומות ימי הביניים, והכיתוב BRASOV בהר.',
+    mapQuery: 'Brasov Old Town Romania', bbq: false,
+    tips: ['הכנסייה השחורה — כניסה חינם לילדים', 'כיכר Sfatului מקסימה']
+  },
+  {
+    num: 7, date: 'חמישי 14.8', title: 'טירת בראן — דרקולה! 🧛',
+    places: ['Bran Castle', 'Rasnov Fortress', 'שוק Bran'],
+    desc: 'ביקור בטירת בראן האגדתית, שנקשרת לאגדת ולד דרקולה. עצירה בצודעת ראשנוב ושוק מלאכות.',
+    mapQuery: 'Bran Castle Romania Dracula', bbq: false,
+    tips: ['הכי טוב להגיע בבוקר', 'חנות מזכרות בשוק ליד הטירה']
+  },
+  {
+    num: 8, date: 'שישי 15.8', title: 'סיגישוארה — עיר ימי הביניים ⚔️',
+    places: ['Sighisoara Citadel', 'Clock Tower', 'Birth House of Vlad Impaler'],
+    desc: 'מורשת יונסקו! עיר מבוצרת מהמאה ה-12 שנשתמרה בשלמותה. טיפוס למגדל השעון ונוף מרהיב.',
+    mapQuery: 'Sighisoara Citadel Medieval Romania', bbq: false,
+    tips: ['רחובות מרוצפים — נעליים נוחות!', 'מסעדות מסורתיות במבצר']
+  },
+  {
+    num: 9, date: 'שבת 16.8', title: 'קלוז\'-נאפוקה — העיר הגדולה 🌆',
+    places: ['Cluj-Napoca', 'Central Park', 'Fabrica de Pensule'],
+    desc: 'קלוז\'-נאפוקה — לב טרנסילבניה ומרכז תרבות. פארק מרכזי עם אגם, ארמון Banffy, מסעדות מצוינות.',
+    mapQuery: 'Cluj-Napoca Central Park Romania', bbq: false,
+    tips: ['עיר סטודנטים — חיי לילה ותרבות', 'Papanasi הכי טוב כאן!']
+  },
+  {
+    num: 10, date: 'ראשון 17.8', title: 'BBQ בגדות נהר Someș ♨️🏞️',
+    places: ['Someș River Banks', 'Nature Park Cluj', 'Cheile Turzii'],
+    desc: 'יום נחיה! BBQ מפואר על גדות נהר סומש הציורי. אחה"צ טיול קצר לפיורד טורדה עם ציפורים ומפלים.',
+    mapQuery: 'Cheile Turzii Canyon Romania', bbq: true,
+    tips: ['חנות BBQ ב-Kaufland העירוני', 'פיורד טורדה — מסלול 2 ש']
+  },
+  {
+    num: 11, date: 'שני 18.8', title: 'מרמורש — כפרים עתיקים 🌾',
+    places: ['Maramureș', 'Wooden Churches', 'Merry Cemetery Săpânța'],
+    desc: 'מסע לצפון — מחוז מרמורש עם כנסיות עץ מהמאה ה-17. בית הקברות העליז הצבעוני של סאפנצה.',
+    mapQuery: 'Maramures Wooden Churches Romania UNESCO', bbq: false,
+    tips: ['UNESCO — 8 כנסיות עץ', 'בית הקברות העליז — ייחודי בעולם']
+  },
+  {
+    num: 12, date: 'שלישי 19.8', title: 'ספא ויינות בוואלאכיה 🍷',
+    places: ['Baile Herculane', 'Dealu Mare Wine Region', 'Curtea de Argeș'],
+    desc: 'יום מרגיע. בוקר בעיר הספא ההיסטורית, אחה"צ טעימת יינות ברגיון Dealu Mare הפורה.',
+    mapQuery: 'Dealu Mare Wine Romania', bbq: false,
+    tips: ['יינות רומניה — מפתיעים!', 'מנוחה חשובה לפני הסיום']
+  },
+  {
+    num: 13, date: 'רביעי 20.8', title: 'BBQ פרידה ובוקרשט 🍖🌆',
+    places: ['Herăstrău Park', 'Village Museum', 'Calea Victoriei'],
+    desc: 'חזרה לבוקרשט. בוקר במוזיאון הכפר (מוזיאון פתוח אויר מרהיב), BBQ אחרון בפארק הרסטראו.',
+    mapQuery: 'Herastrau Park Bucharest', bbq: true,
+    tips: ['מוזיאון הכפר — מעולה לילדים', 'קניות ממרה בעיר הישנה']
+  },
+  {
+    num: 14, date: 'חמישי 21.8', title: 'טיסה הביתה ✈️',
+    places: ['שדה התעופה Otopeni', 'קניות אחרונות', 'Check-in'],
+    desc: 'בוקר פנוי לקניות אחרונות — שוקולד Poiana, ריבות ביתיות, Tuica. עזיבה לשדה התעופה ופרידה מרומניה!',
+    mapQuery: 'Henri Coanda Airport Bucharest', bbq: false,
+    tips: ['הגיעו 3 שעות לפני', 'Tuica — שזיף מזוקק — מתנה מצוינת!']
+  }
+];
+
+function buildItinerary() {
+  const cont = document.getElementById('itineraryList');
+  cont.innerHTML = DAYS.map((d, i) => `
+    <div class="dayCard">
+      <div class="dayHeader" onclick="toggleDay(${i})">
+        <div class="dayNum">${d.num}</div>
+        <div class="dayInfo">
+          <div class="dayTitle">${d.title}</div>
+          <div class="dayDate">${d.date}</div>
+        </div>
+        ${d.bbq ? '<span title="BBQ" style="font-size:1.2rem">♨️</span>' : ''}
+        <span class="arrow" id="arrow${i}">▼</span>
+      </div>
+      <div class="dayBody" id="dayBody${i}">
+        <p>${d.desc}</p>
+        ${d.places.map(p => `<span class="badge">📍${p}</span>`).join('')}
+        ${d.bbq ? '<div class="bbqTag">♨️ יום BBQ!</div>' : ''}
+        <iframe class="mapEmbed" loading="lazy"
+          src="https://maps.google.com/maps?q=${encodeURIComponent(d.mapQuery)}&output=embed"
+          allowfullscreen></iframe>
+        ${d.tips.map(t => `<p style="font-size:0.82rem;color:var(--text2)">💡 ${t}</p>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleDay(i) {
+  const body = document.getElementById('dayBody' + i);
+  const arrow = document.getElementById('arrow' + i);
+  const open = body.classList.toggle('open');
+  arrow.textContent = open ? '▲' : '▼';
+}
+
+/* ================================================================
+   STORIES DATA
+================================================================ */
+const STORIES = [
+  {
+    title: '🐻 הדוב שאהב פפנאש',
+    text: `בעמק ירוק בלב טרנסילבניה גר דוב חום גדול ועצלן בשם בוגדאן. בוגדאן אהב לשחק בנהר, לטפס על עצים, ומעל הכל — לאכול פפנאש! פפנאש הם סופגניות רומניות מטוגנות עם גבינה לבנה וריבת דובדבנים. כל בוקר היה בוגדאן מתעורר ומריח את ריח הסופגניות שעלה מהכפר למטה.
+
+יום אחד החליט בוגדאן לרדת לכפר. הוא הלבש מקטורן ישן שמצא ביער, שים כובע קטן על ראשו, ופסע לאט לכיכר השוק. "בוקר טוב!" קרא בוגדאן לאופה הזקן. "שלום, אדון גדול!" ענה האופה ולא הבחין שמדובר בדוב.
+
+בוגדאן קנה שלושה פפנאש, שילם במטבעות שמצא ליד הנהר, וחזר בשמחה ליער. מאותו יום, כל בוקר שישי היה בוגדאן יורד לשוק לקנות פפנאש — וכל הכפר חשב שהוא הלקוח הנאמן הגדול ביותר שהיה להם!`,
+    questions: [
+      {
+        q: 'מה שם הדוב בסיפור?',
+        opts: ['ולדימיר', 'בוגדאן', 'מירצ\'א', 'ניקולאה'],
+        ans: 1
+      },
+      {
+        q: 'מה הם פפנאש?',
+        opts: ['פיצה רומנית', 'לחם מחיטה', 'סופגניות עם גבינה וריבה', 'מרק קרפיון'],
+        ans: 2
+      },
+      {
+        q: 'מה הלבש הדוב כדי לא להיות מזוהה?',
+        opts: ['שמלה ופאה', 'מקטורן ישן וכובע', 'מסכה', 'צעיף גדול'],
+        ans: 1
+      },
+      {
+        q: 'מתי ירד הדוב לשוק?',
+        opts: ['כל בוקר ראשון', 'כל שבת', 'כל בוקר שישי', 'כל ערב'],
+        ans: 2
+      }
+    ]
+  },
+  {
+    title: '🧛 המדריך הקטן לטירת בראן',
+    text: `אנה היתה ילדה בת עשר שחיה ליד טירת בראן. כל הילדים בכפר פחדו מהטירה, אבל אנה דווקא אהבה אותה. "הטירה לא מפחידה," היתה אומרת. "היא פשוט ישנה ובודדה."
+
+יום אחד הגיעה משפחה ישראלית לביקור. ילד בשם עמי עמד ליד השער ורעד מפחד. "אל תפחד," אמרה לו אנה בחיוך. "אין כאן דרקולה. ולד דרקולה היה נסיך אמיתי ששמר על עמו." עמי הסתכל עליה בהפתעה.
+
+ביחד הם נכנסו לטירה. אנה הסבירה לעמי כל חדר: כאן הייתה חדר האוכל, שם הייתה הספרייה, ובמגדל הגבוה ניתן לראות את כל עמק ברשוב. כשיצאו, עמי לא רעד יותר. "תודה," אמר. "ביקרתי בטירה כי פחדתי — ויצאתי כי חיבבתי!"`,
+    questions: [
+      {
+        q: 'מה גיל אנה בסיפור?',
+        opts: ['שמונה', 'תשע', 'עשר', 'שתים עשרה'],
+        ans: 2
+      },
+      {
+        q: 'מה שם הילד הישראלי?',
+        opts: ['דני', 'עמי', 'נועם', 'אורי'],
+        ans: 1
+      },
+      {
+        q: 'מה ניתן לראות ממגדל הטירה?',
+        opts: ['הים', 'עמק ברשוב', 'בירת בוקרשט', 'נהר הדנובה'],
+        ans: 1
+      },
+      {
+        q: 'מה אמרה אנה על ולד דרקולה?',
+        opts: ['שהוא ערפד מפחיד', 'שהוא נסיך ששמר על עמו', 'שהוא לא היה קיים', 'שהוא גר עדיין בטירה'],
+        ans: 1
+      }
+    ]
+  },
+  {
+    title: '🌽 מממליגה זהובה',
+    text: `בכפר קטן בצפון רומניה חיה סבתא לומיניצה. הייתה לה קדרה ענקית נחושת שעמדה על האח מאז שהיתה נערה צעירה. כל בוקר הייתה מבשלת מממליגה — דייסת תירס זהובה שהיתה ריחה מגיע עד סוף הכפר.
+
+"הסוד," הייתה אומרת לנכדיה, "הוא להוסיף קמצוץ מלח, כוס חלב טרי מהפרה, וכמות גדולה של אהבה." הנכדים תמיד צחקו, אבל הייתה להם אמונה שהסבתא צדקה.
+
+יום אחד הגיע שף מפורסם מבוקרשט לכפר. הוא טעם את המממליגה של לומיניצה ועצר. "זו הטובה ביותר שטעמתי בחיי," אמר. "מה הסוד שלך?" הסבתא הסתכלה עליו בחיוך. "קמצוץ מלח, כוס חלב... ולוש אהבה." השף רשם הכל — אבל אף פעם לא הצליח לשכפל את הטעם המיוחד.`,
+    questions: [
+      {
+        q: 'מה שם הסבתא?',
+        opts: ['מריה', 'לומיניצה', 'אנה', 'ילנה'],
+        ans: 1
+      },
+      {
+        q: 'מאיזה חומר עשויה הקדרה?',
+        opts: ['ברזל', 'עץ', 'נחושת', 'חרס'],
+        ans: 2
+      },
+      {
+        q: 'מהם המרכיבים שסיפרה הסבתא?',
+        opts: ['שמן וסוכר', 'מלח, חלב ואהבה', 'חמאה ושמנת', 'ביצים ויין'],
+        ans: 1
+      },
+      {
+        q: 'מה הגיב השף על המממליגה?',
+        opts: ['שהיא ממוצעת', 'שהיא הטובה ביותר שטעם', 'שהיא מלוחה מדי', 'שהוא מכין טוב יותר'],
+        ans: 1
+      }
+    ]
+  },
+  {
+    title: '🏔️ הכבשה שטיפסה על הקרפטים',
+    text: `קלאוס הרועה היה לו עדר גדול בהרי קרפטים. בין הכבשות היתה אחת מיוחדת בשם סטלה — לבנה כשלג עם כתם שחור על האוזן. סטלה הייתה תמיד השניה, תמיד הסקרנית, תמיד בוחנת את הגבולות.
+
+יום אחד, כשקלאוס ישן בצל, החליטה סטלה לטפס אל פסגת ההר. כבשות אחרות ניסו לעצור אותה: "סטלה, מסוכן! יש שם עשב קפוא!" אבל סטלה לא שמעה. היא טיפסה ועוד טיפסה, עד שהגיעה לפסגה.
+
+מהפסגה ראתה את כל העמקים, הנהרות הכסופים, הכפרים הקטנים. "אוי!" אמרה סטלה בשקט. כשחזרה לעדר, כולם רצו לשמוע מה ראתה. "ראיתי," אמרה, "שהעולם גדול הרבה יותר ממה שחשבנו — ושהאחו שלנו הוא הירוק ביותר מכולם."`,
+    questions: [
+      {
+        q: 'מה שם הרועה?',
+        opts: ['שטפן', 'קלאוס', 'ניקולאה', 'איון'],
+        ans: 1
+      },
+      {
+        q: 'מה המיוחד בסטלה?',
+        opts: ['היא שחורה כולה', 'יש לה כתם שחור על האוזן', 'היא הגדולה בעדר', 'היא זקנה'],
+        ans: 1
+      },
+      {
+        q: 'למה טיפסה סטלה לפסגה?',
+        opts: ['מחפשת מזון', 'בורחת מאריה', 'מסקרנות', 'כי קלאוס ביקש'],
+        ans: 2
+      },
+      {
+        q: 'מה גילתה סטלה מהפסגה על האחו שלהם?',
+        opts: ['שהוא הקטן ביותר', 'שהוא הירוק ביותר', 'שהוא יבש', 'שאין בו מים'],
+        ans: 1
+      }
+    ]
+  },
+  {
+    title: '🍯 הדב והדבורים של הדנובה',
+    text: `על גדת הדנובה, הנהר הארוך שעובר ברומניה, היה כוורת ענקית בעץ אלון עתיק. הדבורים שם הכינו דבש מיוחד — אדום כמעט, עם טעם של פרחי שדה ועשבי בר.
+
+חורף אחד הגיע דוב רעב מהיער. "רק קצת דבש," לחש לעצמו, "ואחרי זה ישן." הדבורים ראו אותו ועצרו אותו. "אם אתה רוצה דבש," אמרה המלכה, "עזור לנו קודם."
+
+הדוב עזר: הוא הרחיק את הדובים האחרים שהפריעו, ניקח ענפים נפולים מסביב לכוורת, וסיים בסחיבת דלי מים מהנהר. "עכשיו," אמרה המלכה, "הנה הדבש שהרווחת." הדוב טעם — מימיו לא אכל דבש מתוק יותר. "אולי," חשב, "כי פעם ראשונה הרווחתי אותו."`,
+    questions: [
+      {
+        q: 'על גדת איזה נהר הייתה הכוורת?',
+        opts: ['הריין', 'הדנובה', 'הסומש', 'הטיסה'],
+        ans: 1
+      },
+      {
+        q: 'כיצד נראה הדבש המיוחד?',
+        opts: ['צהוב בהיר', 'שקוף', 'אדום כמעט', 'חום כהה'],
+        ans: 2
+      },
+      {
+        q: 'מה ביקשו הדבורים מהדוב?',
+        opts: ['שיעזוב', 'שיעזור קודם', 'שישלם כסף', 'שיביא פרחים'],
+        ans: 1
+      },
+      {
+        q: 'למה הדבש היה מתוק יותר מתמיד?',
+        opts: ['כי הייתה עונה טובה', 'כי הדוב הרווח אותו', 'כי הייתה זו כוורת מיוחדת', 'כי היה חורף'],
+        ans: 1
+      }
+    ]
+  }
+];
+
+function buildStories() {
+  const cont = document.getElementById('storiesList');
+  cont.innerHTML = STORIES.map((s, si) => `
+    <div class="storyCard">
+      <div class="storyHeader" onclick="toggleStory(${si})">
+        <span class="storyTitle">${s.title}</span>
+        <span class="arrow" id="sarrow${si}">▼</span>
+      </div>
+      <div class="storyBody" id="storyBody${si}">
+        <p class="storyText">${s.text.replace(/\n/g, '<br>')}</p>
+        <div class="quizSection">
+          <h4>❓ חידון — ענה על 4 שאלות:</h4>
+          <div class="storyProgress" id="sprogress${si}">ענית על 0 / 4 שאלות</div>
+          ${s.questions.map((q, qi) => `
+            <div class="quiz-q" id="qq${si}_${qi}">
+              <p>${qi+1}. ${q.q}</p>
+              <div class="quiz-opts">
+                ${q.opts.map((opt, oi) => `
+                  <button class="quiz-opt" onclick="answerQ(${si},${qi},${oi},${q.ans})">${opt}</button>
+                `).join('')}
+              </div>
+              <div class="quiz-feedback" id="qfb${si}_${qi}"></div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleStory(i) {
+  const body = document.getElementById('storyBody' + i);
+  const arrow = document.getElementById('sarrow' + i);
+  const open = body.classList.toggle('open');
+  arrow.textContent = open ? '▲' : '▼';
+}
+
+const storyAnswered = {};
+function answerQ(si, qi, chosen, correct) {
+  const key = `${si}_${qi}`;
+  if (storyAnswered[key]) return;
+  storyAnswered[key] = true;
+  const opts = document.querySelectorAll(`#qq${si}_${qi} .quiz-opt`);
+  opts.forEach((o, i) => {
+    o.classList.add('disabled');
+    if (i === correct) o.classList.add('correct');
+    else if (i === chosen) o.classList.add('wrong');
+  });
+  const fb = document.getElementById(`qfb${si}_${qi}`);
+  if (chosen === correct) {
+    fb.textContent = '✅ נכון! מצוין!';
+    fb.className = 'quiz-feedback ok';
+    playSound('score');
+  } else {
+    fb.textContent = `❌ לא נכון. התשובה הנכונה: "${STORIES[si].questions[qi].opts[correct]}"`;
+    fb.className = 'quiz-feedback nope';
+  }
+  // update progress
+  const answered = STORIES[si].questions.filter((_, qi2) => storyAnswered[`${si}_${qi2}`]).length;
+  document.getElementById(`sprogress${si}`).textContent = `ענית על ${answered} / 4 שאלות`;
+}
+
+/* ================================================================
+   TIPS DATA
+================================================================ */
+const TIPS = [
+  { icon: '💳', title: 'מטבע', text: 'לאו רומני (RON). כדאי להחליף במחלף, לא בשדה. ATM זמין בערים.' },
+  { icon: '🚗', title: 'נסיעה', text: 'רכב שכור — הדרך הטובה ביותר. כבישים בעמקים מעולים, בהרים — זהירות!' },
+  { icon: '🌡️', title: 'מזג אוויר', text: 'אוגוסט — חם בבוקרשט (30+°), קריר בהרים (15-20°). קחו שכבות.' },
+  { icon: '📱', title: 'SIM כרטיס', text: 'Orange/Vodafone — כרטיס תייר זול ב-10€. כיסוי מצוין ברוב הארץ.' },
+  { icon: '🏥', title: 'בריאות', text: 'EHIC / ביטוח נסיעות חובה! בתי חולים פרטיים בערים — עדיפים.' },
+  { icon: '🍽️', title: 'מסעדות', text: 'אוכל מצוין ב-20-30 RON (5-7€). Ciorba, Mititei, Papanasi — חובה!' },
+  { icon: '🔌', title: 'חשמל', text: 'שקע אירופאי סטנדרטי. 230V. כמו בישראל — ממיר לא נדרש.' },
+  { icon: '🗣️', title: 'שפה', text: 'רומנית. גילה — בערים רבים מדברים אנגלית. תרגמו מילים בסיסיות!' },
+  { icon: '⛽', title: 'דלק', text: 'בנזין זול יותר מישראל. תחנות OMV/Petrom בכל הכבישים הראשיים.' },
+  { icon: '🎒', title: 'ילדים', text: 'רומניה ידידותית לילדים מאוד. פארקים, טירות, ג\'ל-גל — כיף לכולם!' },
+  { icon: '🛒', title: 'קניות', text: 'Kaufland, Lidl, Penny — סופרמרקטים זולים. מאפיות מקומיות — מצוין!' },
+  { icon: '🏕️', title: 'BBQ', text: 'קניית מנגל חד-פעמי ב~15 RON. גחלים ורשת בכל סופרמרקט.' }
+];
+
+function buildTips() {
+  document.getElementById('tipsGrid').innerHTML = TIPS.map(t => `
+    <div class="tipCard">
+      <div class="tipIcon">${t.icon}</div>
+      <h3>${t.title}</h3>
+      <p>${t.text}</p>
+    </div>
+  `).join('');
+}
+
+/* ================================================================
+   HIGH SCORES
+================================================================ */
+function loadScores() {
+  try { return JSON.parse(localStorage.getItem('romania_highscores')) || []; }
+  catch { return []; }
+}
+function saveScoresToStorage(s) {
+  localStorage.setItem('romania_highscores', JSON.stringify(s));
+}
+function renderScores() {
+  const scores = loadScores();
+  const medals = ['🥇','🥈','🥉'];
+  document.getElementById('scoresTbody').innerHTML = scores.length
+    ? scores.map((s, i) => `<tr><td>${medals[i]||i+1}</td><td>${s.name}</td><td>${s.score}</td></tr>`).join('')
+    : '<tr><td colspan="3" style="color:var(--text2);padding:20px">אין שיאים עדיין — שחק!</td></tr>';
+}
+function saveScore() {
+  const name = document.getElementById('playerName').value.trim() || 'שחקן אנונימי';
+  const score = parseInt(document.getElementById('final-score').textContent) || 0;
+  const scores = loadScores();
+  scores.push({ name, score });
+  scores.sort((a, b) => b.score - a.score);
+  scores.splice(5);
+  saveScoresToStorage(scores);
+  document.getElementById('gameOverScreen').classList.remove('show');
+  renderScores();
+  showSection('scores');
+  playSound('score');
+}
+function clearScores() {
+  if (confirm('למחוק את כל השיאים?')) {
+    localStorage.removeItem('romania_highscores');
+    renderScores();
+  }
+}
+
+/* ================================================================
+   GAME ENGINE
+================================================================ */
+const GAME = {
+  canvas: null, ctx: null,
+  running: false, started: false,
+  score: 0, hiScore: 0, frame: 0,
+  speed: 4, baseSpeed: 4,
+  animId: null,
+  bear: { x: 90, y: 0, w: 50, h: 55, vy: 0, jumps: 0, maxJumps: 2, grounded: false },
+  groundY: 0,
+  obstacles: [], collectibles: [],
+  spawnTimer: 0, spawnInterval: 90,
+  collectTimer: 0, collectInterval: 60,
+  clouds: []
+};
+
+function initGameCanvas() {
+  if (GAME.canvas) return;
+  GAME.canvas = document.getElementById('game-canvas');
+  GAME.ctx = GAME.canvas.getContext('2d');
+  GAME.groundY = GAME.canvas.height - 45;
+  GAME.bear.y = GAME.groundY - GAME.bear.h;
+  GAME.hiScore = Math.max(...loadScores().map(s => s.score), 0);
+  document.getElementById('hiscore-display').textContent = GAME.hiScore;
+  for (let i = 0; i < 5; i++) {
+    GAME.clouds.push({
+      x: Math.random() * GAME.canvas.width,
+      y: 20 + Math.random() * 60,
+      w: 60 + Math.random() * 60,
+      speed: 0.5 + Math.random() * 0.5
+    });
+  }
+  drawIdleScreen();
+  setupGameInput();
+}
+
+function setupGameInput() {
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); handleJump(); }
+  });
+  GAME.canvas.addEventListener('touchstart', (e) => { e.preventDefault(); handleJump(); }, { passive: false });
+  GAME.canvas.addEventListener('click', handleJump);
+}
+
+function handleJump() {
+  if (!GAME.running && !GAME.started) { startGame(); return; }
+  if (!GAME.running) return;
+  const bear = GAME.bear;
+  if (bear.jumps < bear.maxJumps) {
+    bear.vy = -13;
+    bear.jumps++;
+    bear.grounded = false;
+    playSound('jump');
+  }
+}
+
+function startGame() {
+  GAME.score = 0; GAME.frame = 0; GAME.speed = GAME.baseSpeed;
+  GAME.obstacles = []; GAME.collectibles = [];
+  GAME.spawnTimer = 0; GAME.spawnInterval = 90;
+  GAME.collectTimer = 0;
+  GAME.bear.y = GAME.groundY - GAME.bear.h;
+  GAME.bear.vy = 0; GAME.bear.jumps = 0; GAME.bear.grounded = true;
+  GAME.running = true; GAME.started = true;
+  document.getElementById('gameOverScreen').classList.remove('show');
+  document.getElementById('startGameBtn').style.display = 'none';
+  if (GAME.animId) cancelAnimationFrame(GAME.animId);
+  gameLoop();
+}
+
+const GRAVITY = 0.7;
+
+function gameLoop() {
+  if (!GAME.running) return;
+  GAME.frame++;
+  GAME.score++;
+  GAME.speed = Math.min(GAME.baseSpeed + Math.floor(GAME.score / 300) * 0.5, 12);
+  updateBear();
+  updateObstacles();
+  updateCollectibles();
+  updateClouds();
+  checkCollisions();
+  drawGame();
+  document.getElementById('score-display').textContent = GAME.score;
+  GAME.animId = requestAnimationFrame(gameLoop);
+}
+
+function updateBear() {
+  const b = GAME.bear;
+  b.vy += GRAVITY;
+  b.y += b.vy;
+  if (b.y >= GAME.groundY - b.h) {
+    b.y = GAME.groundY - b.h;
+    b.vy = 0; b.jumps = 0; b.grounded = true;
+  }
+}
+
+function updateObstacles() {
+  GAME.spawnTimer++;
+  if (GAME.spawnTimer >= GAME.spawnInterval) {
+    GAME.spawnTimer = 0;
+    GAME.spawnInterval = 60 + Math.floor(Math.random() * 60);
+    const tall = Math.random() < 0.3;
+    const h = tall ? 55 : 38;
+    GAME.obstacles.push({ x: GAME.canvas.width + 20, y: GAME.groundY - h, w: 35, h, tall });
+  }
+  GAME.obstacles.forEach(o => { o.x -= GAME.speed; });
+  GAME.obstacles = GAME.obstacles.filter(o => o.x > -60);
+}
+
+const COLLECT_TYPES = [
+  { emoji: '🍩', label: 'פפנאש', points: 10 },
+  { emoji: '🌽', label: 'מממליגה', points: 5 },
+  { emoji: '🍯', label: 'דבש', points: 15 }
+];
+
+function updateCollectibles() {
+  GAME.collectTimer++;
+  if (GAME.collectTimer >= GAME.collectInterval) {
+    GAME.collectTimer = 0;
+    GAME.collectInterval = 80 + Math.floor(Math.random() * 80);
+    const t = COLLECT_TYPES[Math.floor(Math.random() * COLLECT_TYPES.length)];
+    GAME.collectibles.push({
+      x: GAME.canvas.width + 10,
+      y: GAME.groundY - 80 - Math.random() * 40,
+      w: 28, h: 28,
+      ...t,
+      bob: Math.random() * Math.PI * 2
+    });
+  }
+  GAME.collectibles.forEach(c => {
+    c.x -= GAME.speed * 0.85;
+    c.bob += 0.07;
+    c.drawY = c.y + Math.sin(c.bob) * 5;
+  });
+  GAME.collectibles = GAME.collectibles.filter(c => c.x > -50);
+}
+
+function updateClouds() {
+  GAME.clouds.forEach(c => {
+    c.x -= c.speed;
+    if (c.x + c.w < 0) c.x = GAME.canvas.width + 20;
+  });
+}
+
+function checkCollisions() {
+  const b = GAME.bear;
+  const bx = b.x + 8, by = b.y + 8, bw = b.w - 16, bh = b.h - 10;
+  for (const o of GAME.obstacles) {
+    if (bx < o.x + o.w - 4 && bx + bw > o.x + 4 && by < o.y + o.h && by + bh > o.y + 4) {
+      endGame(); return;
+    }
+  }
+  GAME.collectibles = GAME.collectibles.filter(c => {
+    const cy = c.drawY || c.y;
+    if (bx < c.x + c.w && bx + bw > c.x && by < cy + c.h && by + bh > cy) {
+      GAME.score += c.points;
+      playSound('score');
+      return false;
+    }
+    return true;
+  });
+}
+
+function endGame() {
+  GAME.running = false;
+  cancelAnimationFrame(GAME.animId);
+  playSound('gameOver');
+  if (GAME.score > GAME.hiScore) {
+    GAME.hiScore = GAME.score;
+    document.getElementById('hiscore-display').textContent = GAME.hiScore;
+  }
+  document.getElementById('final-score').textContent = GAME.score;
+  document.getElementById('gameOverScreen').classList.add('show');
+  document.getElementById('startGameBtn').style.display = '';
+  drawGameOver();
+}
+
+/* ================================================================
+   DRAWING
+================================================================ */
+function drawIdleScreen() {
+  const { ctx, canvas } = GAME;
+  drawBackground();
+  drawGround();
+  drawBear(GAME.bear.x, GAME.bear.y, false);
+  ctx.fillStyle = currentMode === 'kids' ? '#ff6b35' : '#c9a84c';
+  ctx.font = 'bold 18px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('לחץ רווח / הקלק להתחיל! 🐻', canvas.width / 2, canvas.height / 2 - 20);
+  ctx.font = '13px Arial';
+  ctx.fillStyle = currentMode === 'kids' ? '#555' : '#a0b4c8';
+  ctx.fillText('קפוץ: רווח / נגיעה | קפיצה כפולה אפשרית', canvas.width / 2, canvas.height / 2 + 5);
+}
+
+function drawGameOver() {
+  // overlay handled by CSS
+}
+
+function drawGame() {
+  drawBackground();
+  drawClouds();
+  drawGround();
+  drawObstacles();
+  drawCollectibles();
+  drawBear(GAME.bear.x, GAME.bear.y, GAME.bear.grounded);
+}
+
+function drawBackground() {
+  const { ctx, canvas } = GAME;
+  const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  if (currentMode === 'kids') {
+    grad.addColorStop(0, '#87CEEB');
+    grad.addColorStop(1, '#c8f59e');
+  } else {
+    grad.addColorStop(0, '#0a1628');
+    grad.addColorStop(1, '#1b2d42');
+  }
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawClouds() {
+  const { ctx } = GAME;
+  GAME.clouds.forEach(c => {
+    ctx.fillStyle = currentMode === 'kids' ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.08)';
+    ctx.beginPath();
+    ctx.arc(c.x + c.w * 0.25, c.y + 12, 12, 0, Math.PI * 2);
+    ctx.arc(c.x + c.w * 0.5, c.y + 8, 16, 0, Math.PI * 2);
+    ctx.arc(c.x + c.w * 0.75, c.y + 12, 12, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function drawGround() {
+  const { ctx, canvas, groundY } = GAME;
+  ctx.fillStyle = currentMode === 'kids' ? '#5d4037' : '#1e3550';
+  ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+  ctx.fillStyle = currentMode === 'kids' ? '#4caf50' : '#2a6a3a';
+  ctx.fillRect(0, groundY, canvas.width, 6);
+}
+
+function drawBear(x, y, grounded) {
+  const ctx = GAME.ctx;
+  const brown = '#6d3e0e';
+  const darkBrown = '#4a2800';
+  const tan = '#c68642';
+  ctx.save();
+  // Body
+  ctx.fillStyle = brown;
+  ctx.beginPath();
+  ctx.ellipse(x + 25, y + 35, 22, 20, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // Head
+  ctx.fillStyle = brown;
+  ctx.beginPath();
+  ctx.ellipse(x + 25, y + 14, 16, 14, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // Ears
+  ctx.fillStyle = brown;
+  ctx.beginPath();
+  ctx.arc(x + 12, y + 4, 7, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(x + 38, y + 4, 7, 0, Math.PI * 2);
+  ctx.fill();
+  // Inner ears
+  ctx.fillStyle = tan;
+  ctx.beginPath();
+  ctx.arc(x + 12, y + 4, 4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(x + 38, y + 4, 4, 0, Math.PI * 2);
+  ctx.fill();
+  // Snout
+  ctx.fillStyle = tan;
+  ctx.beginPath();
+  ctx.ellipse(x + 25, y + 19, 9, 7, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // Nose
+  ctx.fillStyle = darkBrown;
+  ctx.beginPath();
+  ctx.ellipse(x + 25, y + 16, 4, 3, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // Eyes
+  ctx.fillStyle = '#111';
+  ctx.beginPath();
+  ctx.arc(x + 19, y + 11, 2.5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(x + 31, y + 11, 2.5, 0, Math.PI * 2);
+  ctx.fill();
+  // Eye shine
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.arc(x + 20, y + 10, 1, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(x + 32, y + 10, 1, 0, Math.PI * 2);
+  ctx.fill();
+  // Legs
+  const legOff = grounded ? Math.sin(GAME.frame * 0.25) * 4 : 0;
+  ctx.fillStyle = darkBrown;
+  ctx.fillRect(x + 8, y + 46, 10, 10 + legOff);
+  ctx.fillRect(x + 32, y + 46, 10, 10 - legOff);
+  // Arms
+  ctx.fillStyle = brown;
+  ctx.fillRect(x + 2, y + 28, 8, 14);
+  ctx.fillRect(x + 40, y + 28, 8, 14);
+  ctx.restore();
+}
+
+function drawObstacles(){ 
+  const ctx = GAME.ctx;
+  GAME.obstacles.forEach(o => {
+    // Chicken body
+    ctx.fillStyle = '#f5f5f5';
+    ctx.beginPath();
+    ctx.ellipse(o.x + 17, o.y + o.h - 18, 15, 13, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // Chicken head
+    ctx.fillStyle = '#f5f5f5';
+    ctx.beginPath();
+    ctx.arc(o.x + 27, o.y + o.h - 30, 9, 0, Math.PI * 2);
+    ctx.fill();
+    // Comb
+    ctx.fillStyle = '#e74c3c';
+    ctx.beginPath();
+    ctx.arc(o.x + 27, o.y + o.h - 38, 5, 0, Math.PI);
+    ctx.fill();
+    // Beak
+    ctx.fillStyle = '#f39c12';
+    ctx.beginPath();
+    ctx.moveTo(o.x + 34, o.y + o.h - 30);
+    ctx.lineTo(o.x + 40, o.y + o.h - 28);
+    ctx.lineTo(o.x + 34, o.y + o.h - 26);
+    ctx.fill();
+    // Eye
+    ctx.fillStyle = '#222';
+    ctx.beginPath();
+    ctx.arc(o.x + 29, o.y + o.h - 31, 2, 0, Math.PI * 2);
+    ctx.fill();
+    // Legs
+    ctx.strokeStyle = '#f39c12';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(o.x + 12, o.y + o.h - 5);
+    ctx.lineTo(o.x + 10, o.y + o.h + 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(o.x + 22, o.y + o.h - 5);
+    ctx.lineTo(o.x + 24, o.y + o.h + 2);
+    ctx.stroke();
+  });
+}
+
+function drawCollectibles() {
+  const ctx = GAME.ctx;
+  GAME.collectibles.forEach(c => {
+    const cy = c.drawY || c.y;
+    ctx.font = '22px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(c.emoji, c.x + 14, cy + 22);
+    // label
+    ctx.font = '9px Arial';
+    ctx.fillStyle = currentMode === 'kids' ? '#333' : '#ccc';
+    ctx.fillText(c.label, c.x + 14, cy + 34);
+    ctx.textAlign = 'left';
+  });
+}
+
+/* ================================================================
+   WEB AUDIO API
+================================================================ */
+let audioCtx = null;
+let musicPlaying = false;
+let musicNode = null;
+let musicGain = null;
+let masterGain = null;
+
+function getAudioCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.3;
+    masterGain.connect(audioCtx.destination);
+  }
+  return audioCtx;
+}
+
+function playSound(type) {
+  try {
+    const ctx = getAudioCtx();
+    if (ctx.state === 'suspended') ctx.resume();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g);
+    g.connect(masterGain);
+    const now = ctx.currentTime;
+    if (type === 'jump') {
+      o.frequency.setValueAtTime(300, now);
+      o.frequency.exponentialRampToValueAtTime(600, now + 0.1);
+      g.gain.setValueAtTime(0.3, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      o.start(now); o.stop(now + 0.2);
+    } else if (type === 'score') {
+      o.frequency.setValueAtTime(523, now);
+      o.frequency.setValueAtTime(659, now + 0.05);
+      o.frequency.setValueAtTime(784, now + 0.1);
+      g.gain.setValueAtTime(0.25, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      o.start(now); o.stop(now + 0.25);
+    } else if (type === 'gameOver') {
+      o.frequency.setValueAtTime(400, now);
+      o.frequency.exponentialRampToValueAtTime(100, now + 0.5);
+      g.gain.setValueAtTime(0.4, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+      o.start(now); o.stop(now + 0.5);
+    }
+  } catch(e) {}
+}
+
+let musicInterval = null;
+const FOLK_MELODY = [392, 440, 494, 523, 494, 440, 392, 349, 392, 440];
+let melodyIdx = 0;
+
+function startMusic() {
+  try {
+    const ctx = getAudioCtx();
+    if (ctx.state === 'suspended') ctx.resume();
+    musicGain = ctx.createGain();
+    musicGain.gain.value = 0.15;
+    musicGain.connect(masterGain);
+    musicPlaying = true;
+    playMelodyNote();
+    musicInterval = setInterval(playMelodyNote, 280);
+    document.getElementById('musicBtn').textContent = '⏸';
+    document.getElementById('musicLabel').textContent = '🎵 מנגנת...';
+  } catch(e) {}
+}
+
+function playMelodyNote() {
+  try {
+    if (!musicPlaying) return;
+    const ctx = getAudioCtx();
+    const o = ctx.createOscillator();
+    o.type = 'triangle';
+    o.frequency.value = FOLK_MELODY[melodyIdx % FOLK_MELODY.length];
+    melodyIdx++;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.15, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+    o.connect(g);
+    g.connect(musicGain);
+    o.start(); o.stop(ctx.currentTime + 0.27);
+  } catch(e) {}
+}
+
+function stopMusic() {
+  musicPlaying = false;
+  if (musicInterval) clearInterval(musicInterval);
+  document.getElementById('musicBtn').textContent = '▶';
+  document.getElementById('musicLabel').textContent = '🎵 מוזיקת רקע רומנית';
+}
+
+function toggleMusic() {
+  if (musicPlaying) stopMusic();
+  else startMusic();
+}
+
+function setVolume(v) {
+  if (masterGain) masterGain.gain.value = parseFloat(v);
+}
+
+/* ================================================================
+   INIT
+================================================================ */
+buildItinerary();
+buildStories();
+buildTips();
+renderScores();
+</script>
+</body>
+</html>
