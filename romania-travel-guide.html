@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a1628">
@@ -1225,7 +1225,7 @@ const PACKING = [
 
 function loadPackingState() {
   try { return JSON.parse(localStorage.getItem('romania_packing')) || {}; }
-  catch { return {}; }
+  catch(e) { console.error('Failed to load packing state:', e); return {}; }
 }
 function savePackingState(state) {
   localStorage.setItem('romania_packing', JSON.stringify(state));
@@ -1697,7 +1697,7 @@ function getAudioCtx() {
     masterGain.connect(audioCtx.destination);
   }
   // iOS requires resume() after a user gesture, every single time it may be suspended
-  if (audioCtx.state === 'suspended') audioCtx.resume();
+  if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
   return audioCtx;
 }
 
